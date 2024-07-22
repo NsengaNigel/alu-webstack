@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 global
     daemon
     maxconn 256
@@ -9,12 +10,14 @@ defaults
     timeout client  50000
     timeout server  50000
 
-frontend https
+frontend www-https
     bind *:443 ssl crt /etc/haproxy/cert.pem
+    mode tcp
+    option tcplog
     default_backend web_servers
 
 backend web_servers
-    mode http
+    mode tcp
     balance roundrobin
     server web01 10.0.0.11:80 check
     server web02 10.0.0.12:80 check
