@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# This script displays information about subdomains of a given domain.
+
+# Function to get the DNS record for a subdomain
+get_dns_record() {
+  local domain=$1
+  local subdomain=$2
+  local record=$(dig +short "$subdomain.$domain")
+  if [ -z "$record" ]; then
+    echo "No record found for $subdomain.$domain"
+  else
+    local record_type="A"
+    echo "The subdomain $subdomain is a $record_type record and points to $record"
+  fi
+}
+
+# Main script execution
+domain=$1
+subdomain=$2
+
+# Ensure the domain parameter is provided
+if [ -z "$domain" ]; then
+  echo "Usage: $0 domain [subdomain]"
+  exit 1
+fi
+
+# List of default subdomains to check
+subdomains=("www" "lb-01" "web-01" "web-02")
+
+# Check if a specific subdomain is provided
+if [ -n "$subdomain" ]; then
+  get_dns_record "$domain" "$subdomain"
+else
+  for sub in "${subdomains[@]}"; do
+    get_dns_record "$domain" "$sub"
+  done
+fi
