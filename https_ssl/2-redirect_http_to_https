@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# This script applies the HAProxy configuration to redirect HTTP traffic to HTTPS
+
+# Ensure the script is executable
+chmod +x apply_haproxy_config.sh
+
+# Copy the configuration file to the HAProxy configuration directory
+sudo cp 2-redirect_http_to_https /etc/haproxy/haproxy.cfg
+
+# Restart HAProxy to apply the new configuration
+sudo systemctl restart haproxy
+
+echo "HAProxy configuration applied successfully."
